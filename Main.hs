@@ -1,13 +1,14 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE OverloadedStrings #-} 
 
 module Main where
 
 import Servant
-import Data.ByteString
-import Data.ByteString.Lazy (toStrict)
+import Data.ByteString.Lazy (ByteString)
 import Data.Aeson
--- import Data.Aeson.Types
-import Data.Attoparsec
+import Data.Aeson.Lens
+import Data.Aeson.Types
+import Control.Lens
 import Network.Wai.Handler.Warp
 import Network.HTTP.Simple (httpLBS, httpJSON, parseRequest
     , getResponseStatusCode, getResponseBody)
@@ -36,15 +37,20 @@ makeRequest :: IO ByteString
 makeRequest = do 
     req <- parseRequest myEndpoint
     resp <- httpLBS req
-    return $ toStrict $ getResponseBody resp
+    return $ getResponseBody resp
+
+getTemp :: Maybe Value -> String
+getTemp (Nothing) = "0.0"
+getTemp (Just val) = 
+    let Just obj = val ^? key "list" . nth 0
+        Just mainObj = obj ^? key "main"
+        Just tempObj = mainObj ^? key "temp"
+    in drop 7 $ show tempObj
 
 
 main :: IO ()
 main = do 
     resp <- makeRequest
-    print $ parse json resp
+    let temp = getTemp $ (decode resp :: Maybe Value)
 
-    run 8081 (myApp)
-
-    where
-        myApp = tempApp "25"
+    run 8081 (tempApp temp)
