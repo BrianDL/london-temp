@@ -3,8 +3,14 @@
 module Main where
 
 import Servant
+import Data.ByteString
+import Data.ByteString.Lazy (toStrict)
+import Data.Aeson
+-- import Data.Aeson.Types
+import Data.Attoparsec
 import Network.Wai.Handler.Warp
-import Network.HTTP.Simple (httpLBS, getResponseStatusCode, parseRequest)
+import Network.HTTP.Simple (httpLBS, httpJSON, parseRequest
+    , getResponseStatusCode, getResponseBody)
 
 
 type RootEndpoint = Get '[PlainText] MyMSG
@@ -24,17 +30,21 @@ tempApp :: String -> Application
 tempApp = (serve msgAPI) . tempServer
 
 myEndpoint :: String
-myEndpoint = "https://api.openweathermap.org/data/2.5/forecast?id=2643743&APPID=82cf415ef1f8714d6709871fc4147d0a"
+myEndpoint = "https://api.openweathermap.org/data/2.5/forecast?id=2643743&units=metric&APPID=82cf415ef1f8714d6709871fc4147d0a"
+
+makeRequest :: IO ByteString
+makeRequest = do 
+    req <- parseRequest myEndpoint
+    resp <- httpLBS req
+    return $ toStrict $ getResponseBody resp
+
 
 main :: IO ()
 main = do 
-    putStrLn "Hello, Haskell!"
-    req <- parseRequest myEndpoint
-    resp <- httpLBS req
+    resp <- makeRequest
+    print $ parse json resp
 
-    putStrLn $ show (getResponseStatusCode resp)
-
-    run 8081 (myApp resp)
+    run 8081 (myApp)
 
     where
-        myApp = tempApp . show . getResponseStatusCode
+        myApp = tempApp "25"
