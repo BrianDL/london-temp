@@ -42,7 +42,7 @@ makeRequest = do
 getTemp :: Maybe Value -> String
 getTemp (Nothing) = "0.0"
 getTemp (Just val) = 
-    let Just obj = val ^? key "list" . nth 0
+    let Just obj = val ^? key "list" . nth 39
         Just mainObj = obj ^? key "main"
         Just tempObj = mainObj ^? key "temp"
     in drop 7 $ show tempObj
