@@ -1,9 +1,12 @@
 # london-temp
 
-## Getting LondonTemp:
+## Getting LondonTemp
 
 ```` 
-git clone https://github.com/BrianDL/london-temp 
+$ git clone https://github.com/BrianDL/london-temp
+...
+
+$ cd london-temp
 ````
 
 ## Installing (with nix)
@@ -20,8 +23,20 @@ nix-build release.nix
 
 ## Running it
 
-after 
+To start the web server just call
 ````
 $ LondonTemp
 ````
 the service will be listening at http://localhost:8081.
+
+## Deploying with NixOps
+
+Testing NixOps deployment in a local virtual machine:
+````
+$ nixops create ./nixops/ltemp-logical.nix ./nixops/ltemp-vbox.nix -d ltemp
+...
+
+$ nixops deploy -d ltemp
+````
+
+and the service will be listening at http://[IP of the VM]:8081
