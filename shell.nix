@@ -4,8 +4,8 @@ let
 
   inherit (nixpkgs) pkgs;
 
-  f = { mkDerivation, aeson, base, http-conduit, lens-aeson
-      , servant-server, stdenv, warp
+  f = { mkDerivation, aeson, base, bytestring, http-conduit, lens
+      , lens-aeson, servant-server, stdenv, warp
       }:
       mkDerivation {
         pname = "LondonTemp";
@@ -14,10 +14,11 @@ let
         isLibrary = false;
         isExecutable = true;
         executableHaskellDepends = [
-          aeson base http-conduit lens-aeson servant-server warp
+          aeson base bytestring http-conduit lens lens-aeson servant-server
+          warp
         ];
         homepage = "https://github.com/BrianDL/london-temp";
-        description = "shows London's current temperature";
+        description = "Shows London's current temperature";
         license = stdenv.lib.licenses.gpl2;
       };
 
