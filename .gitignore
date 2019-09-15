@@ -21,3 +21,6 @@ cabal.project.local~
 .HTF/
 .ghc.environment.*
 .vagrant/*
+*.save0
+result
+result/*

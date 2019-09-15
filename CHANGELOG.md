@@ -1,4 +1,4 @@
-# Revision history for london-temp
+# Revision history for LondonTemp
 
 ## 0.1.0.0 -- YYYY-mm-dd
 

@@ -9,9 +9,8 @@ import Data.Aeson
 import Data.Aeson.Lens
 import Data.Aeson.Types
 import Control.Lens
-import Network.Wai.Handler.Warp
-import Network.HTTP.Simple (httpLBS, httpJSON, parseRequest
-    , getResponseStatusCode, getResponseBody)
+import Network.Wai.Handler.Warp (run)
+import Network.HTTP.Simple (httpLBS, parseRequest, getResponseBody)
 
 
 type RootEndpoint = Get '[PlainText] MyMSG
