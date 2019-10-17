@@ -1,3 +1,5 @@
+### This repository has moved to https://gitlab.com/BridLeiva/london-temp
+
 # london-temp
 
 ## Getting LondonTemp
